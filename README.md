@@ -86,8 +86,8 @@ Realtime Sync Layer: onSnapshot · Optimistic UI · Offline Cache
 
 | 이름 | 역할 | 담당 |
 |---|---|---|
-| 윤희호,김○○ | PM · Fullstack | 기획, UI 설계, 프론트엔드 구현, Firebase 연동·배포 |
-| 김○○,윤희호 | Frontend | HTML · Tailwind · JS |
+| 윤희호 ,김○○ | PM · Fullstack | 기획, UI 설계, 프론트엔드 구현, Firebase 연동·배포 |
+| 윤희호 ,김○○, | Frontend | HTML · Tailwind · JS |
 | 전○○ | Backend | Firestore · Rules |
 | 이○○ | Design | Figma · 시안 |
 
