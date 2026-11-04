@@ -5,12 +5,8 @@
 
 - **Live Demo**: https://C-ban-nomdeul.mobile.app
 - **개발 형태**: 4인 팀 프로젝트 (신구대학교 소프트웨어 공학 전시회 출품작)
-- **개발 기간**: YYYY.MM ~ YYYY.MM *(수정해 주세요)*
+- **개발 기간**: 20260206 ~ 20260617 
 
-<!-- 스크린샷: 아래 경로에 이미지를 넣어 주세요 -->
-<!-- ![홈 피드](./docs/home.png) -->
-
----
 
 ## 1. 프로젝트 소개
 
@@ -137,4 +133,4 @@ npx firebase-tools deploy
 ## 10. Contact
 
 - GitHub: [@OOKR506](https://github.com/OOKR506)
-- Email: *(개인 이메일로 수정해 주세요)*
+- Email: *yhh0303015@gmail.com*
