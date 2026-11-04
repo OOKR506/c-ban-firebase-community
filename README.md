@@ -7,6 +7,8 @@
 - **개발 형태**: 4인 팀 프로젝트 (신구대학교 소프트웨어 공학 전시회 출품작)
 - **개발 기간**: 2026.02.06 ~ 2026.06.17
 
+<!-- 스크린샷: docs/ 폴더에 이미지를 넣고 아래 주석을 해제하세요 -->
+<!-- ![홈 피드](./docs/home.png) -->
 
 ## 1. 프로젝트 소개
 
@@ -28,11 +30,14 @@
 
 | 기능 | 설명 |
 |---|---|
-| 🏠 홈 피드 | 환영 배너, 퀵액션, 미션, 랭킹을 한 화면에 구성 |
-| 📋 카테고리 게시판 | 9개 관심사별 분류, 공지 고정, 검색 |
-| 💬 실시간 채팅 | 주제별 채팅방, Firestore `onSnapshot`으로 즉시 반영 |
-| 🎰 참여형 미니게임 | 룰렛·출석체크·투표로 포인트 획득 |
-| 👤 MY · 포인트 | 활동 내역, 보유 포인트, 랭킹 시각화 |
+| 🏠 홈 피드 | 미션, 랭킹, 최근 게시글, 카테고리 바로가기를 한 화면에 구성 |
+| 📋 카테고리 게시판 | 9개 관심사별 분류, 공지 고정, 검색, 인기글, 댓글·대댓글, 스크랩 |
+| 💬 실시간 채팅 | 5개 주제별 채팅방, Firestore `onSnapshot`으로 즉시 반영 |
+| 🗳️ 투표 · D-Day | 투표 생성·참여·마감, 반 일정 D-Day 관리 |
+| 🎰 미니게임 | 일일 룰렛, 가위바위보(포인트 베팅), 숫자 게임 |
+| 💎 포인트 시스템 | 출석체크·미션·게임·상점·업적을 포인트와 랭킹으로 연결 |
+| 📩 소통 | DM, 팔로우, 알림(댓글·좋아요·DM·팔로우) |
+| 🛡️ 운영 | 게시글·댓글 신고, 관리자 신고 처리 화면 |
 
 ---
 
@@ -40,12 +45,13 @@
 
 | 구분 | 사용 기술 |
 |---|---|
-| Frontend | HTML, JavaScript (Vanilla JS), Tailwind CSS |
-| Backend | Firebase Auth, Cloud Functions, Firestore Security Rules |
-| Data | Firestore, Firebase Storage |
+| Frontend | HTML, JavaScript (Vanilla JS), Tailwind CSS (CDN) |
+| Backend (BaaS) | Firebase Authentication (이메일/비밀번호), Cloud Firestore |
 | App | PWA (Service Worker, Web App Manifest) |
 | DevOps | Firebase Hosting, GitHub |
 | Design | Figma |
+
+별도 빌드 과정 없이 정적 파일로 동작하며, Firebase SDK 9.23(compat)을 CDN으로 불러옵니다.
 
 ### 시스템 구조
 
@@ -53,22 +59,24 @@
 Client (Vanilla JS + Tailwind, PWA)
         │
         ▼
-Firebase (Auth / Security Rules / Cloud Functions)
+Firebase Auth ── 로그인 · 회원가입 · 비밀번호 재설정
         │
         ▼
-Firestore (Realtime Snapshot) · Storage
-
-Realtime Sync Layer: onSnapshot · Optimistic UI · Offline Cache
+Cloud Firestore ── posts · comments · chatRooms · polls · users · reports ...
+        │
+        ▼
+Firebase Hosting (정적 배포, Service Worker로 오프라인 폴백)
 ```
 
 ---
 
 ## 4. 구현 포인트
 
-- **실시간 동기화**: Firestore `onSnapshot`으로 게시글·채팅·댓글 즉시 반영
-- **포인트 시스템**: 출석·게시글·투표·게임 참여를 하나의 포인트로 연결하고 랭킹으로 시각화
-- **PWA**: Service Worker + manifest로 홈 화면 추가 후 네이티브처럼 동작
-- **상태 관리**: Loading / Empty / Error / Retry 상태를 전 화면에 공통 적용
+- **실시간 채팅**: `chatRooms/{roomId}/messages`를 `onSnapshot`으로 구독하고, 방 전환 시 리스너를 해제해 불필요한 연결을 막았습니다.
+- **포인트 시스템**: 출석·미션·미니게임·상점 구매를 하나의 `points` 값으로 연결하고 멤버 랭킹으로 보여줍니다. 룰렛은 `날짜_uid`를 문서 ID로 써서 하루 1회만 돌릴 수 있게 했습니다.
+- **PWA**: manifest와 Service Worker로 홈 화면 설치를 지원합니다. 데이터는 항상 최신이어야 하므로 네트워크 우선, 실패 시에만 캐시를 쓰는 전략입니다.
+- **오프라인 대응**: Firestore 오프라인 퍼시스턴스를 켜서 연결이 불안정해도 마지막 데이터를 보여줍니다.
+- **관리자 기능**: 신고 접수부터 관리자 처리까지 하나의 흐름으로 구현했습니다.
 
 ---
 
@@ -76,9 +84,9 @@ Realtime Sync Layer: onSnapshot · Optimistic UI · Offline Cache
 
 | # | 문제 | 해결 |
 |---|---|---|
-| 1 | Firestore 실시간 리스너로 쿼리 수(요금)가 급증 | 쿼리당 `limit`, 조건 필터 적용, 캐시 활용으로 부하 감소 |
-| 2 | 모바일에서 긴 글/링크가 가로 스크롤 유발 | `overflow-x: hidden` + `word-break` 전역 CSS 규칙으로 통일 |
-| 3 | 익명/실명 혼용으로 책임 소재가 불분명 | 닉네임 + Firebase Auth UID 조합, 관리자 신고 처리 흐름 도입 |
+| 1 | Firestore 읽기 수(요금)가 늘어나는 문제 | 목록 조회에 `limit`을 적용하고 조건을 좁히고, 오프라인 캐시를 활용해 읽기 부하 감소 |
+| 2 | 모바일에서 긴 글·URL 때문에 화면이 넓어지고 가로 스크롤 발생 | `overflow-x: hidden`, `word-break` 등 전역 CSS 규칙으로 모든 화면에 일괄 적용 |
+| 3 | 익명/실명 혼용으로 책임 소재가 불분명 | 닉네임과 Firebase Auth UID를 함께 저장하고, 신고 → 관리자 처리 흐름 도입 |
 
 ---
 
@@ -101,36 +109,66 @@ Realtime Sync Layer: onSnapshot · Optimistic UI · Offline Cache
 
 ---
 
-## 8. 실행 방법
+## 8. 폴더 구조
+
+```
+.
+├── index.html              # 진입점 (Tailwind CDN, Firebase SDK 로드)
+├── app-firebase.js         # 화면 렌더링 · 이벤트 처리
+├── firebase-config.js      # Firebase 초기화 (웹 앱 설정값)
+├── firebase-auth.js        # 회원가입 · 로그인 · 비밀번호
+├── firebase-posts.js       # 게시글 · 카테고리
+├── firebase-comments.js    # 댓글
+├── firebase-chat.js        # 실시간 채팅
+├── firebase-poll.js        # 투표
+├── firebase-dday.js        # D-Day
+├── firebase-minigame.js    # 룰렛 · 가위바위보 · 숫자 게임
+├── firebase-userdata.js    # 출석 · 미션 · 포인트 · 상점 · 업적
+├── firebase-dm.js          # DM
+├── firebase-follow.js      # 팔로우
+├── firebase-notifications.js
+├── firebase-admin.js       # 신고 · 관리자 기능
+├── sw.js                   # Service Worker
+├── manifest.json           # PWA 설정
+├── icons/                  # PWA 아이콘
+├── firebase.json           # Hosting 설정
+└── .firebaserc             # Firebase 프로젝트 연결
+```
+
+---
+
+## 9. 실행 방법
+
+빌드가 필요 없는 정적 사이트라서 로컬 서버만 띄우면 됩니다.
 
 ```bash
 # 1. 저장소 클론
 git clone https://github.com/OOKR506/c-ban-firebase-community.git
 cd c-ban-firebase-community
 
-# 2. Firebase 설정
-#    - Firebase 콘솔에서 프로젝트를 만들고 Auth, Firestore, Hosting을 활성화
-#    - 웹 앱 설정값을 firebase-config.js(또는 해당 설정 파일)에 입력
-#    ※ 서비스 계정 키(JSON), .env 파일은 절대 커밋하지 않습니다.
-
-# 3. 로컬 실행
-npx firebase-tools emulators:start   # 또는 정적 서버로 실행: npx serve .
-
-# 4. 배포
-npx firebase-tools deploy
+# 2. 로컬 실행 (http://localhost:3000)
+npx serve .
 ```
+
+> ⚠️ `firebase-config.js`는 운영 중인 Firebase 프로젝트(`c8nom-c3cd3`)를 가리킵니다. 로컬에서 실행하면 실제 데이터에 연결되므로, 테스트할 때는 아래처럼 본인 프로젝트로 바꿔 사용하세요.
+
+**내 Firebase 프로젝트로 실행하기**
+1. [Firebase 콘솔](https://console.firebase.google.com)에서 프로젝트를 만들고 **Authentication(이메일/비밀번호)**, **Firestore**, **Hosting**을 활성화합니다.
+2. 웹 앱을 등록하고 발급된 설정값으로 `firebase-config.js`의 `firebaseConfig`를 교체합니다.
+3. `.firebaserc`의 프로젝트 ID를 본인 프로젝트 ID로 바꿉니다.
+4. 배포: `npx firebase-tools deploy --only hosting`
 
 ---
 
-## 9. 배운 점
+## 10. 배운 점
 
 - 실시간 리스너 환경에서 **비용과 성능을 함께 고려한 쿼리 설계**의 중요성을 경험했습니다.
-- 서버 없이 Firebase만으로 인증·권한·실시간 동기화·배포까지 한 흐름으로 운영하는 방법을 익혔습니다.
+- 서버 없이 Firebase만으로 인증·데이터·실시간 동기화·배포까지 한 흐름으로 운영하는 방법을 익혔습니다.
 - 익명성과 책임 사이의 균형 같은 **커뮤니티 운영 문제를 기능 설계로 풀어보는** 경험을 했습니다.
 
 ---
 
-## 10. Contact
+## 11. Contact
 
 - GitHub: [@OOKR506](https://github.com/OOKR506)
 - Email: yhh0303015@gmail.com
