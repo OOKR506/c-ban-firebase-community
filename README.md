@@ -91,7 +91,7 @@ Realtime Sync Layer: onSnapshot · Optimistic UI · Offline Cache
 | 이름 | 역할 | 담당 |
 |---|---|---|
 | 윤희호 | PM · Fullstack | 기획, UI 설계, Firebase 연동·배포 *(직접 구현한 기능을 구체적으로 수정해 주세요. 예: 실시간 채팅, 포인트 시스템, Security Rules)* |
-| 김○○ | Frontend | HTML · Tailwind · JS |
+| 김○○ , 윤희호 | Frontend | HTML · Tailwind · JS |
 | 전○○ | Backend | Firestore · Rules |
 | 이○○ | Design | Figma · 시안 |
 
@@ -107,8 +107,8 @@ Realtime Sync Layer: onSnapshot · Optimistic UI · Offline Cache
 
 ```bash
 # 1. 저장소 클론
-git clone https://github.com/OOKRYA/C-ban-cafe.git
-cd C-ban-cafe
+git clone https://github.com/OOKR506/c-ban-firebase-community.git
+cd c-ban-firebase-community
 
 # 2. Firebase 설정
 #    - Firebase 콘솔에서 프로젝트를 만들고 Auth, Firestore, Hosting을 활성화
@@ -136,5 +136,5 @@ npx firebase-tools deploy
 
 ## 10. Contact
 
-- GitHub: [@OOKRYA](https://github.com/OOKRYA)
+- GitHub: [@OOKR506](https://github.com/OOKR506)
 - Email: *(개인 이메일로 수정해 주세요)*
