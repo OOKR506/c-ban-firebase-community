@@ -5,7 +5,7 @@
 
 - **Live Demo**: https://C-ban-nomdeul.mobile.app
 - **개발 형태**: 4인 팀 프로젝트 (신구대학교 소프트웨어 공학 전시회 출품작)
-- **개발 기간**: 20260206 ~ 20260617 
+- **개발 기간**: 2026.02.06 ~ 2026.06.17
 
 
 ## 1. 프로젝트 소개
@@ -86,8 +86,8 @@ Realtime Sync Layer: onSnapshot · Optimistic UI · Offline Cache
 
 | 이름 | 역할 | 담당 |
 |---|---|---|
-| 윤희호 | PM · Fullstack | 기획, UI 설계, Firebase 연동·배포 *(직접 구현한 기능을 구체적으로 수정해 주세요. 예: 실시간 채팅, 포인트 시스템, Security Rules)* |
-| 김○○ , 윤희호 | Frontend | HTML · Tailwind · JS |
+| 윤희호,김○○ | PM · Fullstack | 기획, UI 설계, 프론트엔드 구현, Firebase 연동·배포 |
+| 김○○,윤희호 | Frontend | HTML · Tailwind · JS |
 | 전○○ | Backend | Firestore · Rules |
 | 이○○ | Design | Figma · 시안 |
 
@@ -118,8 +118,6 @@ npx firebase-tools emulators:start   # 또는 정적 서버로 실행: npx serve
 npx firebase-tools deploy
 ```
 
-> 실제 파일 구조와 설정 파일명에 맞게 수정해 주세요.
-
 ---
 
 ## 9. 배운 점
@@ -133,4 +131,4 @@ npx firebase-tools deploy
 ## 10. Contact
 
 - GitHub: [@OOKR506](https://github.com/OOKR506)
-- Email: *yhh0303015@gmail.com*
+- Email: yhh0303015@gmail.com
