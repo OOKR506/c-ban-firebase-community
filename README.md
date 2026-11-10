@@ -3,7 +3,7 @@
 > Firebase 기반 학급 커뮤니티 PWA 웹서비스
 > "C반 놈들, 반 친구들과 함께하는 온라인 카페. 소통과 참여가 한곳에."
 
-- **Live Demo**: https://C-ban-nomdeul.mobile.app
+- **Live Demo**: https://c-ban-firebase-community.web.app/
 - **개발 형태**: 4인 팀 프로젝트 (신구대학교 소프트웨어 공학 전시회 출품작)
 - **개발 기간**: 2026.02.06 ~ 2026.06.17
 
