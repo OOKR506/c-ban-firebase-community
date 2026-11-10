@@ -3,7 +3,7 @@
 //       (2) 오프라인일 때 완전 백지 대신 마지막으로 본 화면을 보여줌
 // 데이터(Firestore)는 항상 최신이어야 하므로 캐시보다 네트워크를 우선합니다.
 
-const CACHE_NAME = 'cbannomdeul-v6';
+const CACHE_NAME = 'cbannomdeul-v7';
 const APP_SHELL = ['/', '/index.html'];
 
 self.addEventListener('install', (event) => {
